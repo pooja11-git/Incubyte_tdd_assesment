@@ -1,5 +1,8 @@
 class StringCalculator
   def add(numbers)
-    0
+    return 0 if numbers.empty?
+    return numbers.to_i if numbers.match?(/^\d+$/)
+    0   
   end
 end
+
