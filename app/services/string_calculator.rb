@@ -5,15 +5,20 @@ class StringCalculator
 
     if numbers.start_with?("//")
       header, numbers = numbers.split("\n", 2)
-      custom_delimiter = header[2..]
-      delimiters << Regexp.escape(custom_delimiter)
+
+      if header.include?("[")
+        delimiters += header.scan(/\[(.*?)\]/).flatten.map { |d| Regexp.escape(d) }
+      else
+        delimiters << Regexp.escape(header[2..])
+      end
     end
 
     nums = numbers.split(/#{delimiters.join("|")}/).map(&:to_i)
+
     negatives = nums.select(&:negative?)
     raise "negatives not allowed: #{negatives.join(', ')}" if negatives.any?
-    nums.select { |n| n <= 1000 }.sum
 
+    nums.select { |n| n <= 1000 }.sum
   end
 end
 
